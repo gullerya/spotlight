@@ -17,7 +17,7 @@ process.stdout.write('\t\x1B[32mOK\x1B[0m' + os.EOL);
 
 process.stdout.write('minifying...');
 fs.writeFileSync(
-	'./dist/callout.min.js',
-	uglifyES.minify(fs.readFileSync('./dist/callout.js', { encoding: 'utf8' }), minifyOptions).code
+	'./dist/spotlight.min.js',
+	uglifyES.minify(fs.readFileSync('./dist/spotlight.js', { encoding: 'utf8' }), minifyOptions).code
 );
 process.stdout.write('\t\t\t\x1B[32mOK\x1B[0m' + os.EOL);

@@ -4,6 +4,7 @@
   "description": "spotlight an abitrary DOM element or viewport area while fading out the rest of the content",
   "keywords": [
     "spotlight",
+    "highlight",
     "callout",
     "shading",
     "shade",
