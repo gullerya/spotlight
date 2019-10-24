@@ -2,7 +2,7 @@
 [![npm](https://img.shields.io/npm/v/@gullerya/spotlight.svg?label=npm%20@gullerya/spotlight)](https://www.npmjs.com/package/@gullerya/spotlight)
 [![Travis](https://travis-ci.org/gullerya/spotlight.svg?branch=master)](https://travis-ci.org/gullerya/spotlight)
 [![Codecov](https://img.shields.io/codecov/c/github/gullerya/spotlight/master.svg)](https://codecov.io/gh/gullerya/spotlight/branch/master)
-[![Codacy](https://img.shields.io/codacy/grade/a3879d7077eb4eef83a591733ad7c579.svg?logo=codacy)](https://www.codacy.com/app/gullerya/spotlight)
+[![Codacy](https://img.shields.io/codacy/grade/d464e4d7653949939e66c32b73e51d6b.svg?logo=codacy)](https://www.codacy.com/app/gullerya/spotlight)
 
 # Summary
 
