@@ -2,17 +2,17 @@ const
 	PARENT_KEY = Symbol('parent.key'),
 	TARGET_KEY = Symbol('target.key'),
 	COORDS_EXTRACTOR_KEY = Symbol('coords.extractor.key'),
-	DEFAULT_OPTIONS = {
-
-	};
+	DEFAULT_OPTIONS = {};
 
 export function spotlight(target, container, options) {
 	const opts = Object.assign(DEFAULT_OPTIONS, options, { target: target, parent: container || document.body });
 	validateOptions(opts);
+
 	const sls = document.createElement('spotlight-scene');
 	sls[PARENT_KEY] = opts.parent;
 	sls.target = opts.target;
-	//	configure more options - TODO
+	//	TODO: configure more options
+
 	sls[PARENT_KEY].appendChild(sls);
 	return sls;
 }
@@ -32,10 +32,15 @@ template.innerHTML = `
 
 		.spotlight {
 			position: absolute;
-			border: 100vmax solid;
-			border-color: rgba(0, 0, 0, 0.1);
+			border: 200vmax solid;
+			border-color: rgba(0, 0, 0);
 			transform: translate(-50%, -50%);
-			transition: all 0.5s;
+			opacity: 0;
+			transition: all 333ms;
+		}
+
+		.spotlight.shown {
+			opacity: 0.4;
 		}
 
 		.round {
@@ -51,6 +56,7 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 		super();
 		const s = this.attachShadow({ mode: 'open' });
 		s.appendChild(template.content.cloneNode(true));
+		setTimeout(() => this.shadowRoot.querySelector('.spotlight').classList.add('shown'), 0);
 	}
 
 	get parent() {
@@ -74,10 +80,18 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 		const sl = this.shadowRoot.querySelector('.spotlight');
 		sl.style.top = coords.y + coords.height / 2 + 'px';
 		sl.style.left = coords.x + coords.width / 2 + 'px';
-		sl.style.width = sl.style.height = Math.max(coords.width, coords.height);
+		sl.style.width = sl.style.height = Math.max(coords.width, coords.height) + 'px';
 	}
 
-	static [COORDS_EXTRACTOR_KEY](e) {
+	remove() {
+		const sl = this.shadowRoot.querySelector('.spotlight');
+		sl.addEventListener('transitionend', () => {
+			this[PARENT_KEY].removeChild(this);
+		});
+		sl.classList.remove('shown');
+	}
+
+	[COORDS_EXTRACTOR_KEY](e) {
 		const result = e.getBoundingClientRect();
 		return result;
 	}

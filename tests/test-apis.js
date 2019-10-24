@@ -1,7 +1,7 @@
 ﻿import { createSuite } from '../../node_modules/just-test/dist/just-test.min.js'
-import { callout } from '../../dist/callout.js';
+import { spotlight } from '../../dist/spotlight.js';
 
-const suite = createSuite({ name: 'Testing callout APIs' });
+const suite = createSuite({ name: 'Testing spotlight APIs' });
 
 suite.addTest({ name: 'test A' }, test => {
 	const
@@ -10,10 +10,11 @@ suite.addTest({ name: 'test A' }, test => {
 		divC = document.createElement('div');
 
 	divA.style.position = 'absolute';
-	divA.style.top = '1000px';
+	divA.style.top = '100px';
 	divA.style.left = '100px';
 	divA.style.width = '400px';
 	divA.style.height = '200px';
+	divA.style.outline = '2px solid red';
 	divA.style.overflow = 'auto';
 	document.body.appendChild(divA);
 
@@ -23,17 +24,26 @@ suite.addTest({ name: 'test A' }, test => {
 	divB.style.width = '200px';
 	divB.style.height = '100px';
 	divB.style.overflow = 'auto';
-	divA.appendChild(divB);
+	divB.style.outline = '2px solid blue';
+	document.body.appendChild(divB);
 
 	divC.style.position = 'absolute';
 	divC.style.top = '200px';
 	divC.textContent = 'some thing to call out over';
-	divB.appendChild(divC);
+	divC.style.outline = '2px solid green';
+	document.body.appendChild(divC);
 
-	callout({
-		target: divC,
-		content: 'something'
-	});
+	setTimeout(() => {
+		const sl = spotlight(divA);
+
+		setTimeout(() => {
+			sl.target = divB;
+			setTimeout(() => {
+				sl.target = divC;
+				setTimeout(() => sl.remove(), 5000);
+			}, 5000);
+		}, 5000);
+	}, 1000);
 
 	test.pass();
 });
