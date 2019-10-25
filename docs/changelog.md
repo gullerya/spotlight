@@ -1,3 +1,3 @@
 # Changelog
 
-* __0.0.1__ initial one
+* __1.0.1__ initial release

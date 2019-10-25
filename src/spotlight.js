@@ -126,7 +126,7 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 		this[RENDER_KEY]();
 	}
 
-	remove() {
+	close() {
 		const sl = this.shadowRoot.querySelector('.spotlight');
 		sl.addEventListener('transitionend', () => {
 			this[PARENT_KEY].removeChild(this);

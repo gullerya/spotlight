@@ -43,7 +43,7 @@ suite.addTest({ name: 'test A' }, test => {
 			setTimeout(() => {
 				sl.target = divC;
 				sl.shape = SHAPES.box;
-				//setTimeout(() => sl.remove(), 5000);
+				setTimeout(() => sl.close(), 5000);
 			}, 5000);
 		}, 5000);
 	}, 1000);

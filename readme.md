@@ -15,8 +15,8 @@ Main aspects:
 
 #### Last versions (full changelog is [here](https://github.com/gullerya/object-observer/blob/master/docs/changelog.md))
 
-* __0.0.1__
-  * initial take
+* __1.0.1__
+  * initial release
 
 # Base API
 `spotlight` library consists of a single entry-level API,
@@ -91,7 +91,7 @@ when not needed anymore.
     - values better to be taken from the `SHAPES` enum, like `SHAPES.circle`
 
 #### methods:
-* `sls.remove()`
+* `sls.close()`
     - removes the `spotlight-scene` component and performs all relevant cleanups
 
 # Typical usage example
