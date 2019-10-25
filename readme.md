@@ -23,6 +23,8 @@ Main aspects:
 allowing to create a `spotlight-scene` with a given parameters,
 applied to the DOM.
 
+Additionally, some constant enumerators provided for convenience.
+
 This component may then be further interacted via component's own APIs as described below, to change its appearance, flavor or spot target,
 and to be removed at the end of usage.
 
@@ -31,9 +33,9 @@ therefore it is possible to create as many 'spotlights' as needed,
 even if in the real use-cases one would rarely need more than a single instance.
 
 #### import:
-Import the library as in example below:
+Import the library and it's constants as in example below:
 ```javascript
-import spotlight from './dist/spotlight.min.js';
+import { spotlight, SHAPES } from './dist/spotlight.min.js';
 ```
 
 #### syntax:
@@ -79,7 +81,34 @@ when not needed anymore.
     - acceptible values are subject to the same constraints as in the main API
         - MUST be an element
         - MUST be a descendend of the `container`
+* `sls.shape`
+    - returns the currently used shape
+    - setting this property on a 'living' component will be immediatelly applied
+    - acceptible values:
+        - `circle` <small>[default]</small>
+        - `oval`
+        - `box`
+    - values better to be taken from the `SHAPES` enum, like `SHAPES.circle`
 
 #### methods:
 * `sls.remove()`
     - removes the `spotlight-scene` component and performs all relevant cleanups
+
+# Typical usage example
+The flow below exemplifies typical usage of the library:
+```javascript
+const t1 = <... the element to be spotted>;
+const t2 = <... another one>;
+
+const sl = spotlight(t1);   //  the spotlight is shown now
+
+...
+
+sl.target = t2;             //  spotlight moved to a new target
+sl.style.color = '#110';    //  color of the shade is adjusted...
+sl.shape = SHAPES.oval;     //  ... and spot's shape too
+
+...
+
+sl.remove();
+```

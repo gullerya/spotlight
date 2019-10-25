@@ -1,5 +1,5 @@
 ﻿import { createSuite } from '../../node_modules/just-test/dist/just-test.min.js'
-import { spotlight } from '../../dist/spotlight.js';
+import { spotlight, SHAPES } from '../../dist/spotlight.js';
 
 const suite = createSuite({ name: 'Testing spotlight APIs' });
 
@@ -37,10 +37,13 @@ suite.addTest({ name: 'test A' }, test => {
 		const sl = spotlight(divA);
 
 		setTimeout(() => {
+			sl.style.color = '#110';
 			sl.target = divB;
+			sl.shape = SHAPES.oval;
 			setTimeout(() => {
 				sl.target = divC;
-				setTimeout(() => sl.remove(), 5000);
+				sl.shape = SHAPES.box;
+				//setTimeout(() => sl.remove(), 5000);
 			}, 5000);
 		}, 5000);
 	}, 1000);
