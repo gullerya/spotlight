@@ -95,7 +95,6 @@ when not needed anymore.
     - removes the `spotlight-scene` component and performs all relevant cleanups
 
 # Typical usage example
-
 The flow below exemplifies typical usage of the library:
 ```javascript
 const t1 = <... the element to be spotted>;
