@@ -3,7 +3,7 @@ import { spotlight, SHAPES } from '../../dist/spotlight.js';
 
 const suite = createSuite({ name: 'Testing spotlight APIs' });
 
-suite.addTest({ name: 'test A' }, test => {
+suite.runTest({ name: 'test A', timeout: 15000 }, async test => {
 	const
 		divA = document.createElement('div'),
 		divB = document.createElement('div'),
@@ -33,22 +33,23 @@ suite.addTest({ name: 'test A' }, test => {
 	divC.style.outline = '2px solid green';
 	document.body.appendChild(divC);
 
-	setTimeout(() => {
-		const sl = spotlight(divA);
-
+	return new Promise(r => {
 		setTimeout(() => {
-			sl.style.color = '#110';
-			sl.target = divB;
-			sl.shape = SHAPES.oval;
+			const sl = spotlight(divA);
+
 			setTimeout(() => {
-				sl.target = divC;
-				sl.shape = SHAPES.box;
-				setTimeout(() => sl.close(), 5000);
-			}, 5000);
-		}, 5000);
-	}, 1000);
-
-	test.pass();
+				sl.style.color = '#110';
+				sl.target = divB;
+				sl.shape = SHAPES.oval;
+				setTimeout(() => {
+					sl.target = divC;
+					sl.shape = SHAPES.box;
+					setTimeout(() => {
+						sl.close();
+						r();
+					}, 3000);
+				}, 3000);
+			}, 3000);
+		}, 1000);
+	});
 });
-
-suite.run();
