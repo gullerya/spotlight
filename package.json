@@ -1,6 +1,6 @@
 {
   "name": "@gullerya/spotlight",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "spotlight an abitrary DOM element or viewport area while fading out the rest of the content",
   "keywords": [
     "spotlight",
