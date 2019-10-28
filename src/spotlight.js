@@ -39,43 +39,50 @@ template.innerHTML = `
 			left: 0;
 			right: 0;
 			bottom: 0;
-			color: #000;
 			z-index: 999;
 			overflow: hidden;
 		}
 
 		:host(.shown) .spotlight {
-			opacity: 0.4;
+			border-color: rgba(0, 0, 0, 0.5);
 		}
 
 		.spotlight {
 			position: absolute;
 			border: 200vmax solid;
+			border-color: rgba(0, 0, 0, 0);
 			transform: translate(-50%, -50%);
-			opacity: 0;
 			transition: all 333ms;
 		}
 
-		:host .spotlight.border {
+		.inner-fence {
+			position: absolute;
+			top: -2px;
+			left: -2px;
+			right: -2px;
+			bottom: -2px;
 			border: 3px solid #ff0;
-			opacity: 1;
 		}
 
-		:host(.box) .spotlight {
+		:host(.box) .spotlight,
+		:host(.box) .inner-fence {
 			border-radius: calc(200vmax + 24px);
 		}
 
-		:host(.oval) .spotlight {
+		:host(.oval) .spotlight,
+		:host(.oval) .inner-fence {
 			border-radius: 50%;
 		}
 
-		:host(.circle) .spotlight {
+		:host(.circle) .spotlight,
+		:host(.circle) .inner-fence {
 			border-radius: 50%;
 		}
 	</style>
 
-	<div class="spotlight shadow"></div>
-	<div class="spotlight border"></div>
+	<div class="spotlight shadow">
+		<div class="inner-fence"></div>
+	</div>
 `;
 
 customElements.define('spotlight-scene', class extends HTMLElement {
@@ -111,6 +118,10 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 	}
 
 	set target(target) {
+		this.moveTo(target);
+	}
+
+	moveTo(target) {
 		if (this[TARGET_KEY] === target) {
 			return;
 		}
@@ -123,7 +134,7 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 		}
 
 		this[TARGET_KEY] = target;
-		this[RENDER_KEY]();
+		return this[RENDER_KEY]();
 	}
 
 	close() {

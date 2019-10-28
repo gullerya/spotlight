@@ -7,7 +7,8 @@ suite.runTest({ name: 'test A', timeout: 15000 }, async test => {
 	const
 		divA = document.createElement('div'),
 		divB = document.createElement('div'),
-		divC = document.createElement('div');
+		divC = document.createElement('div'),
+		divD = document.createElement('div');
 
 	divA.style.position = 'absolute';
 	divA.style.top = '100px';
@@ -33,23 +34,19 @@ suite.runTest({ name: 'test A', timeout: 15000 }, async test => {
 	divC.style.outline = '2px solid green';
 	document.body.appendChild(divC);
 
-	return new Promise(r => {
-		setTimeout(() => {
-			const sl = spotlight(divA);
+	divD.style.position = 'absolute';
+	divD.style.top = '600px';
+	divD.style.left = '300px';
+	divD.style.width = '100px';
+	divD.style.height = '300px';
+	divD.style.overflow = 'auto';
+	divD.style.outline = '2px solid orange';
+	document.body.appendChild(divD);
 
-			setTimeout(() => {
-				sl.style.color = '#110';
-				sl.target = divB;
-				sl.shape = SHAPES.oval;
-				setTimeout(() => {
-					sl.target = divC;
-					sl.shape = SHAPES.box;
-					setTimeout(() => {
-						sl.close();
-						r();
-					}, 3000);
-				}, 3000);
-			}, 3000);
-		}, 1000);
-	});
+	let sl;
+	await new Promise(r => setTimeout(() => { sl = spotlight(divA); r(); }, 1000));
+	await new Promise(r => setTimeout(() => { sl.style.color = '#110'; sl.target = divB; sl.shape = SHAPES.oval; r(); }, 3000));
+	await new Promise(r => setTimeout(() => { sl.target = divC; sl.shape = SHAPES.box; r(); }, 3000));
+	await new Promise(r => setTimeout(() => { sl.moveTo(divD); sl.shape = SHAPES.oval; r(); }, 3000));
+	//await new Promise(r => setTimeout(() => { sl.close(); r(); }, 3000));
 });
