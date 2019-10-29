@@ -50,16 +50,16 @@ suite.runTest({ name: 'test A', timeout: 15000 }, async test => {
 		transitionDuration: 1000
 	});
 
-	await test.waitMillis(3000);
+	await test.waitMillis(1000);
 	sl.transitionDuration = 333;
 	sl.style.color = '#110';
 	sl.target = divB;
 	sl.shape = SHAPES.circle;
 
-	await test.waitMillis(3000);
+	await test.waitMillis(1000);
 	sl.target = divC; sl.shape = SHAPES.box;
 
-	await test.waitMillis(3000);
+	await test.waitMillis(1000);
 	sl.transitionDuration = 2000;
 	sl.shape = SHAPES.oval;
 	await sl.moveTo(divD);
