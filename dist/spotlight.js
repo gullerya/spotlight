@@ -148,7 +148,7 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 
 	moveTo(target) {
 		if (this[TARGET_KEY] === target) {
-			return;
+			return Promise.resolve();
 		}
 
 		if (!target || target.nodeType !== Node.ELEMENT_NODE || target === document.body) {
