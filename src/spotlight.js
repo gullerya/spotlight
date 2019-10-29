@@ -66,10 +66,11 @@ template.innerHTML = `
 
 		.inner-fence {
 			position: absolute;
-			top: -2px;
-			left: -2px;
-			right: -2px;
-			bottom: -2px;
+			top: 50%;
+			left: 50%;
+			width: calc(100% - 2px);
+			height: calc(100% - 2px);
+			transform: translate(-50%, -50%);
 			border: 3px solid;
 			border-color: rgba(255, 255, 0, 0);
 			transition: all var(--t-d);
