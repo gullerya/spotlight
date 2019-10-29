@@ -15,7 +15,12 @@ Main aspects:
 
 #### Last versions (full changelog is [here](https://github.com/gullerya/object-observer/blob/master/docs/changelog.md))
 
-* __1.0.1__
+* __1.2.0__
+  * added customizable transition duration
+  * added API `moveTo` (same as setting the target, but returns `Promise`, resolved when finished)
+  * `close` API also returns `Promise`, resolved when all done
+
+* __1.1.0__
   * initial release
 
 # Base API
@@ -53,7 +58,8 @@ const slsElement = function spotlight(target[, container[, options]]) { ... }
     - when provided, `container` MUST be an ancestor of the `target`
     - default `container` is `document.body`
 * `options` <small>[optional]</small>
-    - TBD
+    - `shape` - see `shape property definition of the `spotlight-scene` API below
+    - `transition-duration` - see `transition-duration` property definition of the `spotlight-scene` below
 
 # `spotlight-scene` component APIs
 The base API outlined above serves as an entry point for the interop
@@ -72,33 +78,38 @@ when not needed anymore.
 `spotlight-scene` instance that the properties and methods belong to.
 
 #### properties:
-* `sls.container` <small>[read only]</small>
+* `sls.container` <small>[DOM element] [read only]</small>
     - returns the `container` element that the component was initialized with (see base API above)
     - `container` MAY NOT be changed
-* `sls.target`
-    - returns the currently 'spotlighted' element (the current `target`)
+* `sls.target` <small>[DOM element]</small> - 'spotted' element
     - setting this property will move the 'spotlight' to another `target`
     - acceptible values are subject to the same constraints as in the main API
         - MUST be an element
         - MUST be a descendend of the `container`
-* `sls.shape`
-    - returns the currently used shape
+* `sls.shape` <small>[enum]</small> - shape of the spotlight, defaults to `circle`
     - setting this property on a 'living' component will be immediatelly applied
     - acceptible values:
-        - `circle` <small>[default]</small>
+        - `circle`
         - `oval`
         - `box`
     - values better to be taken from the `SHAPES` enum, like `SHAPES.circle`
+* `transition-duration` <small>[number]</small> - duration in millis of spotlight's transitions (move from target to target, shape change, etc); defaults to 333
+    - setting this property will be effective from the next transition forth
 
 #### methods:
 * `sls.close()`
+    - returns `Promise`, resolved when all done
     - removes the `spotlight-scene` component and performs all relevant cleanups
+* `sls.moveTo(targetElement)`
+    - returns `Promise`, resolved when move it finished
+    - `targetElement` subject to the same constraints `target` property above
 
 # Typical usage example
 The flow below exemplifies typical usage of the library:
 ```javascript
 const t1 = <... the element to be spotted>;
 const t2 = <... another one>;
+const t3 = <... another one>;
 
 const sl = spotlight(t1);   //  the spotlight is shown now
 
@@ -110,5 +121,9 @@ sl.shape = SHAPES.oval;     //  ... and spot's shape too
 
 ...
 
-sl.remove();
+sl.transitionDuration = 500;    //  slow it down a bit
+sl.moveTo(t3)
+    .then(() => console.log('spotlight moved, do something...'));
+
+sl.close();
 ```

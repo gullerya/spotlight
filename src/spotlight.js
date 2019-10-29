@@ -2,11 +2,16 @@ const
 	PARENT_KEY = Symbol('parent.key'),
 	TARGET_KEY = Symbol('target.key'),
 	SHAPE_KEY = Symbol('shape.key'),
-	COORDS_EXTRACTOR_KEY = Symbol('coords.extractor.key'),
+	TD_KEY = Symbol('td.key'),
 	RENDER_KEY = Symbol('render.key'),
+	COORDS_EXTRACTOR_KEY = Symbol('coords.extractor.key'),
+
 	SHAPES = Object.freeze({ circle: 'circle', oval: 'oval', box: 'box' }),
+	DEFAULT_SHAPE = SHAPES.circle,
+	DEFAULT_TD = 333,
 	DEFAULT_OPTIONS = Object.freeze({
-		shape: SHAPES.circle
+		shape: SHAPES.circle,
+		transitionDuration: DEFAULT_TD
 	});
 
 export {
@@ -22,6 +27,7 @@ function spotlight(target, container, options) {
 	//	setting the relevant options first
 	sls[PARENT_KEY] = opts.parent;
 	sls.shape = opts.shape;
+	sls[TD_KEY] = opts.transitionDuration;
 
 	//	setting the target last
 	sls.target = opts.target;
@@ -46,13 +52,16 @@ template.innerHTML = `
 		:host(.shown) .spotlight {
 			border-color: rgba(0, 0, 0, 0.5);
 		}
+		:host(.shown) .inner-fence {
+			border-color: rgba(255, 255, 0, 1);
+		}
 
 		.spotlight {
 			position: absolute;
 			border: 200vmax solid;
 			border-color: rgba(0, 0, 0, 0);
 			transform: translate(-50%, -50%);
-			transition: all 333ms;
+			transition: all var(--t-d);
 		}
 
 		.inner-fence {
@@ -61,26 +70,28 @@ template.innerHTML = `
 			left: -2px;
 			right: -2px;
 			bottom: -2px;
-			border: 3px solid #ff0;
+			border: 3px solid;
+			border-color: rgba(255, 255, 0, 0);
+			transition: all var(--t-d);
 		}
 
-		:host(.box) .spotlight,
-		:host(.box) .inner-fence {
+		.box,
+		.box > .inner-fence {
 			border-radius: calc(200vmax + 24px);
 		}
 
-		:host(.oval) .spotlight,
-		:host(.oval) .inner-fence {
+		.oval,
+		.oval > .inner-fence {
 			border-radius: 50%;
 		}
 
-		:host(.circle) .spotlight,
-		:host(.circle) .inner-fence {
+		.circle,
+		.circle > .inner-fence {
 			border-radius: 50%;
 		}
 	</style>
 
-	<div class="spotlight shadow">
+	<div class="spotlight">
 		<div class="inner-fence"></div>
 	</div>
 `;
@@ -93,6 +104,7 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 	}
 
 	connectedCallback() {
+		this.shadowRoot.host.style.setProperty('--t-d', this[TD_KEY] + 'ms');
 		if (typeof this.offsetWidth === 'number') {
 			this.classList.add('shown');
 		}
@@ -110,6 +122,19 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 		if (this[SHAPE_KEY] !== shape) {
 			this[SHAPE_KEY] = shape;
 			this[RENDER_KEY]();
+		}
+	}
+
+	get transitionDuration() {
+		return this[TD_KEY];
+	}
+
+	set transitionDuration(td) {
+		if (td && typeof td === 'number') {
+			this[TD_KEY] = td;
+			this.shadowRoot.host.style.setProperty('--t-d', this[TD_KEY] + 'ms');
+		} else {
+			console.error('invalid transition duration (' + td + '), staying on the present value (' + this[TD_KEY] + ')');
 		}
 	}
 
@@ -138,11 +163,13 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 	}
 
 	close() {
-		const sl = this.shadowRoot.querySelector('.spotlight');
-		sl.addEventListener('transitionend', () => {
-			this[PARENT_KEY].removeChild(this);
-		});
 		this.classList.remove('shown');
+		return new Promise(resolve => {
+			setTimeout(() => {
+				this[PARENT_KEY].removeChild(this);
+				resolve();
+			}, this[TD_KEY]);
+		});
 	}
 
 	[RENDER_KEY]() {
@@ -168,19 +195,18 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 				w = h = Math.pow(Math.pow(coords.width, 2) + Math.pow(coords.height, 2), 0.5) + 12;
 				s = SHAPES.circle;
 		}
-		const sle = this.shadowRoot.querySelectorAll('.spotlight');
-		sle.forEach(e => {
-			e.style.top = coords.y + coords.height / 2 + 'px';
-			e.style.left = coords.x + coords.width / 2 + 'px';
-			e.style.width = w + 'px';
-			e.style.height = h + 'px';
+
+		const sle = this.shadowRoot.querySelector('.spotlight');
+		return new Promise(resolve => {
+			sle.className = 'spotlight ' + s;
+			Object.assign(sle.style, {
+				top: coords.y + coords.height / 2 + 'px',
+				left: coords.x + coords.width / 2 + 'px',
+				width: w + 'px',
+				height: h + 'px'
+			});
+			setTimeout(resolve, this[TD_KEY]);
 		});
-		Object.keys(SHAPES).forEach(sk => {
-			if (SHAPES[sk] !== s) {
-				this.classList.remove(SHAPES[sk]);
-			}
-		});
-		this.classList.add(s);
 	}
 
 	[COORDS_EXTRACTOR_KEY](e) {
@@ -200,7 +226,11 @@ function validateOptions(opts) {
 		throw new Error('target MUST be a child of a given parent; they MAY NOT be the same element');
 	}
 	if (!opts.shape || !(opts.shape in SHAPES)) {
-		console.error('invalid shape (' + opts.shape + '), falling back to the default (circle)');
-		opts.shape = SHAPES.circle;
+		console.error('invalid shape (' + opts.shape + '), falling back to the default (' + DEFAULT_SHAPE + ')');
+		opts.shape = DEFAULT_SHAPE;
+	}
+	if (!opts.transitionDuration || typeof opts.transitionDuration !== 'number') {
+		console.error('invalid transition duration (' + opts.transitionDuration + '), falling back to the default (' + DEFAULT_TD + ')');
+		opts.transitionDuration = DEFAULT_TD;
 	}
 }

@@ -44,9 +44,28 @@ suite.runTest({ name: 'test A', timeout: 15000 }, async test => {
 	document.body.appendChild(divD);
 
 	let sl;
-	await new Promise(r => setTimeout(() => { sl = spotlight(divA); r(); }, 1000));
-	await new Promise(r => setTimeout(() => { sl.style.color = '#110'; sl.target = divB; sl.shape = SHAPES.oval; r(); }, 3000));
-	await new Promise(r => setTimeout(() => { sl.target = divC; sl.shape = SHAPES.box; r(); }, 3000));
-	await new Promise(r => setTimeout(() => { sl.moveTo(divD); sl.shape = SHAPES.oval; r(); }, 3000));
-	//await new Promise(r => setTimeout(() => { sl.close(); r(); }, 3000));
+	await test.waitMillis(1000);
+	sl = spotlight(divA, null, {
+		shape: SHAPES.oval,
+		transitionDuration: 1000
+	});
+
+	await test.waitMillis(3000);
+	sl.transitionDuration = 333;
+	sl.style.color = '#110';
+	sl.target = divB;
+	sl.shape = SHAPES.circle;
+
+	await test.waitMillis(3000);
+	sl.target = divC; sl.shape = SHAPES.box;
+
+	await test.waitMillis(3000);
+	sl.transitionDuration = 2000;
+	sl.shape = SHAPES.oval;
+	await sl.moveTo(divD);
+	console.log('moved');
+
+	await test.waitMillis(1000);
+	await sl.close();
+	console.log('closed');
 });
