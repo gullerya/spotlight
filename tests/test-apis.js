@@ -66,6 +66,6 @@ suite.runTest({ name: 'test A', timeout: 15000 }, async test => {
 	console.log('moved');
 
 	await test.waitMillis(1000);
-	await sl.close();
+	//await sl.close();
 	console.log('closed');
 });

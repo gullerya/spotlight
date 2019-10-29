@@ -58,7 +58,7 @@ template.innerHTML = `
 
 		.spotlight {
 			position: absolute;
-			border: 200vmax solid;
+			border: 8000px solid;
 			border-color: rgba(0, 0, 0, 0);
 			transform: translate(-50%, -50%);
 			transition: all var(--t-d);
@@ -78,7 +78,7 @@ template.innerHTML = `
 
 		.box,
 		.box > .inner-fence {
-			border-radius: calc(200vmax + 24px);
+			border-radius: 8024px;
 		}
 
 		.oval,

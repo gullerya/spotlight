@@ -1,6 +1,6 @@
 # Changelog
 
-* __1.3.0__
+* __1.3.1__
   * Fixed [Issue #1](https://github.com/gullerya/spotlight/issues/1) - misposition of the inner fence on window resize
 
 * __1.2.1__
