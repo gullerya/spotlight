@@ -15,8 +15,9 @@ Main aspects:
 
 #### Last versions (full changelog is [here](docs/changelog.md))
 
-* __1.3.1__
+* __1.3.2__
   * Fixed [Issue #1](https://github.com/gullerya/spotlight/issues/1) - misposition of the inner fence on window resize
+  * minor styling adjustements of the inner fence
 
 * __1.2.1__
   * minor API bug fix - when moving to the same target we still need to reture `Promise` (resolved one)
