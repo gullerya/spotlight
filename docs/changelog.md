@@ -1,5 +1,10 @@
 # Changelog
 
+* __1.4.0__
+  * Implemented [Issue #2](https://github.com/gullerya/spotlight/issues/2) - allow to create spotlight without a target for the beginning
+  * overrode `getBoundingClientRect` method to return useful dimensions of the spotted area
+  * minor styling adjustements of the transitions
+
 * __1.3.2__
   * Fixed [Issue #1](https://github.com/gullerya/spotlight/issues/1) - misposition of the inner fence on window resize
     * minor styling adjustements of the inner fence

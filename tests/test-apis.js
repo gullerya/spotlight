@@ -45,10 +45,14 @@ suite.runTest({ name: 'test A', timeout: 15000 }, async test => {
 
 	let sl;
 	await test.waitMillis(1000);
-	sl = spotlight(divA, null, {
+	sl = spotlight(null, null, {
 		shape: SHAPES.oval,
 		transitionDuration: 1000
 	});
+	console.log('created');
+	await test.waitMillis(2000);
+	sl.target = divA;
+	console.log('assigned');
 
 	await test.waitMillis(1000);
 	sl.transitionDuration = 333;
@@ -66,6 +70,6 @@ suite.runTest({ name: 'test A', timeout: 15000 }, async test => {
 	console.log('moved');
 
 	await test.waitMillis(1000);
-	//await sl.close();
+	await sl.close();
 	console.log('closed');
 });

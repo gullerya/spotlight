@@ -15,17 +15,17 @@ Main aspects:
 
 #### Last versions (full changelog is [here](docs/changelog.md))
 
+* __1.4.0__
+  * Implemented [Issue #2](https://github.com/gullerya/spotlight/issues/2) - allow to create spotlight without a target for the beginning
+  * overrode `getBoundingClientRect` method to return useful dimensions of the spotted area
+  * minor styling adjustements of the transitions
+
 * __1.3.2__
   * Fixed [Issue #1](https://github.com/gullerya/spotlight/issues/1) - misposition of the inner fence on window resize
   * minor styling adjustements of the inner fence
 
 * __1.2.1__
   * minor API bug fix - when moving to the same target we still need to reture `Promise` (resolved one)
-
-* __1.2.0__
-  * added customizable transition duration
-  * added API `moveTo` (same as setting the target, but returns `Promise`, resolved when finished)
-  * `close` API also returns `Promise`, resolved when all done
 
 # Base API
 `spotlight` library consists of a single entry-level API,
@@ -54,7 +54,7 @@ const slsElement = function spotlight(target[, container[, options]]) { ... }
 ```
 
 #### parameters:
-* `target`
+* `target` <small>[optional]</small>
     - a target __element__ to place the spot over
     - MAY NOT be a `document.body`
 * `container` <small>[optional]</small>
@@ -107,6 +107,9 @@ when not needed anymore.
 * `sls.moveTo(targetElement)`
     - returns `Promise`, resolved when move it finished
     - `targetElement` subject to the same constraints `target` property above
+* `sls.getBoundingClientRect()`
+    - overrides the native method
+    - returns the bounding client rectangle of the spotted area
 
 # Typical usage example
 The flow below exemplifies typical usage of the library:

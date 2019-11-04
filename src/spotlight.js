@@ -30,7 +30,9 @@ function spotlight(target, container, options) {
 	sls[TD_KEY] = opts.transitionDuration;
 
 	//	setting the target last
-	sls.target = opts.target;
+	if (opts.target) {
+		sls.target = opts.target;
+	}
 	sls[PARENT_KEY].appendChild(sls);
 	return sls;
 }
@@ -62,7 +64,8 @@ template.innerHTML = `
 			border: 8000px solid;
 			border-color: rgba(0, 0, 0, 0);
 			transform: translate(-50%, -50%);
-			transition: all var(--t-d);
+			transition-property: top, left, width, height, border-color;
+			transition-duration: var(--t-d);
 		}
 
 		.inner-fence {
@@ -74,7 +77,8 @@ template.innerHTML = `
 			transform: translate(-50%, -50%);
 			border: 3px solid;
 			border-color: rgba(255, 255, 0, 0);
-			transition: all var(--t-d);
+			transition-property: top, left, width, height, border-color;
+			transition-duration: var(--t-d);
 		}
 
 		.box,
@@ -107,9 +111,7 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 
 	connectedCallback() {
 		this.shadowRoot.host.style.setProperty('--t-d', this[TD_KEY] + 'ms');
-		if (typeof this.offsetWidth === 'number') {
-			this.classList.add('shown');
-		}
+		if (this.offsetWidth) this.classList.add('shown');
 	}
 
 	get parent() {
@@ -174,6 +176,10 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 		});
 	}
 
+	getBoundingClientRect() {
+		return this.shadowRoot.querySelector('.inner-fence').getBoundingClientRect();
+	}
+
 	[RENDER_KEY]() {
 		if (!this[TARGET_KEY]) {
 			return;
@@ -218,13 +224,13 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 });
 
 function validateOptions(opts) {
-	if (!opts.target || opts.target.nodeType !== Node.ELEMENT_NODE || opts.target === document.body) {
+	if (opts.target && (opts.target.nodeType !== Node.ELEMENT_NODE || opts.target === document.body)) {
 		throw new Error('invalid target (' + opts.target + ')');
 	}
 	if (!opts.parent || opts.parent.nodeType !== Node.ELEMENT_NODE) {
 		throw new Error('invalid parent (' + opts.parent + ')');
 	}
-	if (!opts.parent.contains(opts.target) || opts.parent === opts.target) {
+	if (opts.target && (!opts.parent.contains(opts.target) || opts.parent === opts.target)) {
 		throw new Error('target MUST be a child of a given parent; they MAY NOT be the same element');
 	}
 	if (!opts.shape || !(opts.shape in SHAPES)) {
