@@ -170,7 +170,7 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 		this.classList.remove('shown');
 		return new Promise(resolve => {
 			setTimeout(() => {
-				this[PARENT_KEY].removeChild(this);
+				this.remove();
 				resolve();
 			}, this[TD_KEY]);
 		});
