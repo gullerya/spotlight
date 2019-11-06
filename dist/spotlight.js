@@ -2,15 +2,17 @@ const
 	PARENT_KEY = Symbol('parent.key'),
 	TARGET_KEY = Symbol('target.key'),
 	SHAPE_KEY = Symbol('shape.key'),
+	SC_KEY = Symbol('sc.key'),
 	TD_KEY = Symbol('td.key'),
 	RENDER_KEY = Symbol('render.key'),
-	COORDS_EXTRACTOR_KEY = Symbol('coords.extractor.key'),
 
 	SHAPES = Object.freeze({ circle: 'circle', oval: 'oval', box: 'box' }),
 	DEFAULT_SHAPE = SHAPES.circle,
+	DEFAULT_SC = [0, 0, 0, 0.8],
 	DEFAULT_TD = 333,
 	DEFAULT_OPTIONS = Object.freeze({
 		shape: SHAPES.circle,
+		shadowColor: DEFAULT_SC,
 		transitionDuration: DEFAULT_TD
 	});
 
@@ -27,7 +29,8 @@ function spotlight(target, container, options) {
 	//	setting the relevant options first
 	sls[PARENT_KEY] = opts.parent;
 	sls.shape = opts.shape;
-	sls[TD_KEY] = opts.transitionDuration;
+	sls.shadowColor = opts.shadowColor;
+	sls.transitionDuration = opts.transitionDuration;
 
 	//	setting the target last
 	if (opts.target) {
@@ -52,7 +55,7 @@ template.innerHTML = `
 		}
 
 		:host(.shown) .spotlight {
-			border-color: rgba(0, 0, 0, 0.5);
+			border-color: var(--s-c);
 		}
 		:host(.shown) .inner-fence {
 			border-color: rgba(255, 255, 0, 1);
@@ -110,7 +113,6 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 	}
 
 	connectedCallback() {
-		this.shadowRoot.host.style.setProperty('--t-d', this[TD_KEY] + 'ms');
 		if (this.offsetWidth) this.classList.add('shown');
 	}
 
@@ -129,12 +131,25 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 		}
 	}
 
+	get shadowColor() {
+		return this[SC_KEY];
+	}
+
+	set shadowColor(sc) {
+		if (shadowColorValid(sc)) {
+			this[SC_KEY] = sc;
+			this.shadowRoot.host.style.setProperty('--s-c', 'rgba(' + this[SC_KEY] + ')');
+		} else {
+			console.error('invalid shadow color (' + sc + '), staying on the present value (' + this[SC_KEY] + ')');
+		}
+	}
+
 	get transitionDuration() {
 		return this[TD_KEY];
 	}
 
 	set transitionDuration(td) {
-		if (td && typeof td === 'number') {
+		if (transitionDurationValid(td)) {
 			this[TD_KEY] = td;
 			this.shadowRoot.host.style.setProperty('--t-d', this[TD_KEY] + 'ms');
 		} else {
@@ -185,7 +200,7 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 			return;
 		}
 
-		const coords = this[COORDS_EXTRACTOR_KEY](this[TARGET_KEY]);
+		const coords = this[TARGET_KEY].getBoundingClientRect();
 		let w, h, s;
 		switch (this[SHAPE_KEY]) {
 			case SHAPES.box:
@@ -216,14 +231,10 @@ customElements.define('spotlight-scene', class extends HTMLElement {
 			setTimeout(resolve, this[TD_KEY]);
 		});
 	}
-
-	[COORDS_EXTRACTOR_KEY](e) {
-		const result = e.getBoundingClientRect();
-		return result;
-	}
 });
 
 function validateOptions(opts) {
+	//	required
 	if (opts.target && (opts.target.nodeType !== Node.ELEMENT_NODE || opts.target === document.body)) {
 		throw new Error('invalid target (' + opts.target + ')');
 	}
@@ -233,12 +244,37 @@ function validateOptions(opts) {
 	if (opts.target && (!opts.parent.contains(opts.target) || opts.parent === opts.target)) {
 		throw new Error('target MUST be a child of a given parent; they MAY NOT be the same element');
 	}
+
+	//	optionals
 	if (!opts.shape || !(opts.shape in SHAPES)) {
 		console.error('invalid shape (' + opts.shape + '), falling back to the default (' + DEFAULT_SHAPE + ')');
 		opts.shape = DEFAULT_SHAPE;
 	}
-	if (!opts.transitionDuration || typeof opts.transitionDuration !== 'number') {
+	if (!shadowColorValid(opts.shadowColor)) {
+		console.error('invalid shadow color (' + opts.shadowColor + '), falling back to the default (' + DEFAULT_SC + ')');
+		opts.transitionDuration = DEFAULT_TD;
+	}
+	if (!transitionDurationValid(opts.transitionDuration)) {
 		console.error('invalid transition duration (' + opts.transitionDuration + '), falling back to the default (' + DEFAULT_TD + ')');
 		opts.transitionDuration = DEFAULT_TD;
 	}
+}
+
+function shadowColorValid(sc) {
+	return sc &&
+		Array.isArray(sc) &&
+		sc.length === 4 &&
+		sc.every((item, index) =>
+			typeof item === 'number' &&
+			!isNaN(item) &&
+			(index === 3
+				? item > 0 && item < 1
+				: item >= 0 && item <= 255)
+		);
+}
+
+function transitionDurationValid(td) {
+	return td &&
+		typeof td === 'number' &&
+		!isNaN(td);
 }

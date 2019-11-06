@@ -1,5 +1,9 @@
 # Changelog
 
+* __1.5.0__
+  * Implemented [Issue #4](https://github.com/gullerya/spotlight/issues/4) - raised the default opacity of shadow to `0.8`
+  * Implemented [Issue #5](https://github.com/gullerya/spotlight/issues/5) - `shadowColor` is overridable by both initial options and property on the living `spotlight-scene`
+
 * __1.4.0__
   * Implemented [Issue #2](https://github.com/gullerya/spotlight/issues/2) - allow to create spotlight without a target for the beginning
   * overrode `getBoundingClientRect` method to return useful dimensions of the spotted area

@@ -15,6 +15,10 @@ Main aspects:
 
 #### Last versions (full changelog is [here](docs/changelog.md))
 
+* __1.5.0__
+  * Implemented [Issue #4](https://github.com/gullerya/spotlight/issues/4) - raised the default opacity of shadow to `0.8`
+  * Implemented [Issue #5](https://github.com/gullerya/spotlight/issues/5) - `shadowColor` is overridable by both initial options and property on the living `spotlight-scene`
+
 * __1.4.0__
   * Implemented [Issue #2](https://github.com/gullerya/spotlight/issues/2) - allow to create spotlight without a target for the beginning
   * overrode `getBoundingClientRect` method to return useful dimensions of the spotted area
@@ -23,9 +27,6 @@ Main aspects:
 * __1.3.2__
   * Fixed [Issue #1](https://github.com/gullerya/spotlight/issues/1) - misposition of the inner fence on window resize
   * minor styling adjustements of the inner fence
-
-* __1.2.1__
-  * minor API bug fix - when moving to the same target we still need to reture `Promise` (resolved one)
 
 # Base API
 `spotlight` library consists of a single entry-level API,
@@ -62,8 +63,9 @@ const slsElement = function spotlight(target[, container[, options]]) { ... }
     - when provided, `container` MUST be an ancestor of the `target`
     - default `container` is `document.body`
 * `options` <small>[optional]</small>
-    - `shape` - see `shape property definition of the `spotlight-scene` API below
-    - `transition-duration` - see `transition-duration` property definition of the `spotlight-scene` below
+    - `shape` - see `shape` property definition below,
+    - `shadowColor` - see `shadowColor` property definition below
+    - `transitionDuration` - see `transitionDuration` property definition below
 
 # `spotlight-scene` component APIs
 The base API outlined above serves as an entry point for the interop
@@ -97,7 +99,9 @@ when not needed anymore.
         - `oval`
         - `box`
     - values better to be taken from the `SHAPES` enum, like `SHAPES.circle`
-* `transition-duration` <small>[number]</small> - duration in millis of spotlight's transitions (move from target to target, shape change, etc); defaults to 333
+* `sls.shadowColor` <small>[Array for `rgba` (CSS) function]</small> - valid Array for `rgba` CSS function; defaults to `[0, 0, 0, 0.8]`
+    - setting this property will have an immediate effect
+* `sls.transitionDuration` <small>[number]</small> - duration in millis of spotlight's transitions (move from target to target, shape change, etc); defaults to `333`
     - setting this property will be effective from the next transition forth
 
 #### methods:
