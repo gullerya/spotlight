@@ -8,14 +8,14 @@
 
 __`spotlight`__ let's you to visually highlight a chosen element; this is done by shading over the surrounding content
 
-Main aspects:
-* TODO
+Below is an example of `spotlight` used in a `callout` framework:
+![](docs/callout-flow-example.gif)
 
-#### Support matrix: ![CHROME](https://github.com/gullerya/object-observer/raw/master/docs/browser_icons/chrome.png)<sub>61+</sub> | ![FIREFOX](https://github.com/gullerya/object-observer/raw/master/docs/browser_icons/firefox.png)<sub>60+</sub> | ![EDGE](https://github.com/gullerya/object-observer/raw/master/docs/browser_icons/edge.png)<sub>16+</sub>
+#### Support matrix: ![CHROME](docs/browser_icons/chrome.png)<sub>61+</sub> | ![FIREFOX](docs/browser_icons/firefox.png)<sub>60+</sub> | ![EDGE](docs/browser_icons/edge.png)<sub>16+</sub>
 
 #### Last versions (full changelog is [here](docs/changelog.md))
 
-* __1.5.0__
+* __1.5.1__
   * Implemented [Issue #4](https://github.com/gullerya/spotlight/issues/4) - raised the default opacity of shadow to `0.8`
   * Implemented [Issue #5](https://github.com/gullerya/spotlight/issues/5) - `shadowColor` is overridable by both initial options and property on the living `spotlight-scene`
 

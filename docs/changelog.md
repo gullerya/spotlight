@@ -1,6 +1,6 @@
 # Changelog
 
-* __1.5.0__
+* __1.5.1__
   * Implemented [Issue #4](https://github.com/gullerya/spotlight/issues/4) - raised the default opacity of shadow to `0.8`
   * Implemented [Issue #5](https://github.com/gullerya/spotlight/issues/5) - `shadowColor` is overridable by both initial options and property on the living `spotlight-scene`
 
