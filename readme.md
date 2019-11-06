@@ -9,6 +9,7 @@
 __`spotlight`__ let's you to visually highlight a chosen element; this is done by shading over the surrounding content
 
 Below is an example of `spotlight` used in a `callout` framework:
+
 ![](docs/callout-flow-example.gif)
 
 #### Support matrix: ![CHROME](docs/browser_icons/chrome.png)<sub>61+</sub> | ![FIREFOX](docs/browser_icons/firefox.png)<sub>60+</sub> | ![EDGE](docs/browser_icons/edge.png)<sub>16+</sub>
