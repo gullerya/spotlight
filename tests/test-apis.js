@@ -1,7 +1,7 @@
-﻿import { createSuite } from '../../node_modules/just-test/dist/just-test.min.js'
+﻿import { getSuite } from '../../node_modules/just-test/dist/just-test.min.js'
 import { spotlight, SHAPES } from '../../dist/spotlight.js';
 
-const suite = createSuite({ name: 'Testing spotlight APIs' });
+const suite = getSuite({ name: 'Testing spotlight APIs' });
 
 suite.runTest({ name: 'test A', timeout: 15000 }, async test => {
 	const
